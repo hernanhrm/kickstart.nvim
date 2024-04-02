@@ -7,15 +7,17 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
-        json = { 'jsonlint' },
         text = { 'vale' },
         go = { 'golangcilint' },
         javascript = { 'eslint_d' },
-        typescript = { 'eslint_d' },
         javascriptreact = { 'eslint_d' },
+        typescript = { 'eslint_d' },
         typescriptreact = { 'eslint_d' },
         svelte = { 'eslint_d' },
         astro = { 'eslint_d' },
+        html = { 'eslint_d' },
+        json = { 'eslint_d' },
+        yaml = { 'eslint_d' },
       }
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:

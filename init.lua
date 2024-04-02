@@ -367,7 +367,67 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        defaults = {
+          vimgrep_arguments = {
+            'rg',
+            '-L',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+          },
+          prompt_prefix = '   ',
+          selection_caret = '  ',
+          entry_prefix = '  ',
+          initial_mode = 'insert',
+          selection_strategy = 'reset',
+          sorting_strategy = 'ascending',
+          layout_strategy = 'horizontal',
+          layout_config = {
+            horizontal = {
+              prompt_position = 'top',
+              preview_width = 0.55,
+              results_width = 0.8,
+            },
+            vertical = {
+              mirror = false,
+            },
+            width = 0.87,
+            height = 0.80,
+            preview_cutoff = 120,
+          },
+          file_sorter = require('telescope.sorters').get_fuzzy_file,
+          file_ignore_patterns = { 'node_modules' },
+          generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
+          path_display = { 'truncate' },
+          winblend = 0,
+          border = {},
+          borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+          color_devicons = true,
+          set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
+          file_previewer = require('telescope.previewers').vim_buffer_cat.new,
+          grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
+          qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
+          -- Developer configurations: Not meant for general override
+          buffer_previewer_maker = require('telescope.previewers').buffer_previewer_maker,
+          mappings = {
+            n = { ['q'] = require('telescope.actions').close },
+          },
+        },
+        pickers = {
+          buffers = {
+            show_all_buffers = true,
+            sort_lastused = true,
+            theme = 'dropdown',
+            mappings = {
+              i = {
+                ['<C-d>'] = 'delete_buffer',
+              },
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -384,6 +444,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>p', builtin.git_files, { desc = 'Git Files' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -596,7 +657,36 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        -- lua stuff
+        'lua-language-server',
+        'stylua',
+
+        -- web dev stuff
+        'css-lsp',
+        'html-lsp',
+        'typescript-language-server',
+        'prettier',
+        'prettierd',
+        'eslint-lsp',
+        'js-debug-adapter',
+        'svelte-language-server',
+        'astro-language-server',
+        'emmet-language-server',
+        'tailwindcss-language-server',
+
+        -- golang stuff
+        'gopls',
+        'goimports',
+        'golines',
+
+        -- python
+        'pyright',
+        'ruff',
+        'black',
+        'isort',
+
+        -- global
+        -- 'refactoring',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -649,6 +739,15 @@ require('lazy').setup({
         -- is found.
         go = { 'goimports', 'goimports_reviser', 'gofmt' },
         javascript = { { 'prettierd', 'prettier' } },
+        javascriptreact = { { 'prettierd', 'prettier' } },
+        typescript = { { 'prettierd', 'prettier' } },
+        typescriptreact = { { 'prettierd', 'prettier' } },
+        svelte = { { 'prettierd', 'prettier' } },
+        astro = { { 'prettierd', 'prettier' } },
+        html = { { 'prettierd', 'prettier' } },
+        css = { { 'prettierd', 'prettier' } },
+        json = { { 'prettierd', 'prettier' } },
+        yaml = { { 'prettierd', 'prettier' } },
       },
     },
   },
@@ -758,23 +857,23 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --
+  --     -- You can configure highlights by doing something like:
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -820,7 +919,28 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'vim',
+        'vimdoc',
+        'css',
+        'javascript',
+        'typescript',
+        'tsx',
+        'markdown_inline',
+        'go',
+        'gowork',
+        'gomod',
+        'gosum',
+        'json',
+        'svelte',
+        'astro',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -831,6 +951,9 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      autotag = {
+        enable = true,
+      },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
