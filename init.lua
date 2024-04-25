@@ -1,3 +1,5 @@
+-- vim.g.base46_cache = vim.fn.stdpath 'data' .. '/base46_cache/'
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -129,6 +131,12 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selected text down' 
 -- Nvim tree
 vim.keymap.set('n', '<leader>pv', '<cmd> NvimTreeToggle <CR>', { desc = 'Toggle nvim tree' })
 vim.keymap.set('n', '<leader>e', '<cmd> NvimTreeFocus <CR>', { desc = 'Focus nvim tree' })
+
+-- ThePrimeagen's keybinds
+vim.keymap.set('n', '<leader>s', [[:%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Search and replace word in cursor' })
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+vim.keymap.set('n', '<leader>Y', [["+Y]])
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -262,6 +270,13 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = true },
     },
     config = function()
+      -- dofile(vim.g.base46_cache .. 'telescope')
+      -- local telescope = require 'telescope'
+      --
+      -- -- load extensions
+      -- for _, ext in ipairs { 'themes' } do
+      --   telescope.load_extension(ext)
+      -- end
       -- Telescope is a fuzzy finder that comes with a lot of different things that
       -- it can fuzzy find! It's more than just a "file finder", it can search
       -- many different aspects of Neovim, your workspace, LSP, and more!
@@ -293,6 +308,7 @@ require('lazy').setup({
         --   },
         -- },
         defaults = {
+          extensions_list = { 'themes' },
           vimgrep_arguments = {
             'rg',
             '-L',
@@ -380,6 +396,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>th', '<cmd>Telescope themes <CR>', { desc = '[T] Select themes' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -808,6 +825,16 @@ require('lazy').setup({
             end
           end, { 'i', 's' }),
 
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif require('luasnip').expand_or_jumpable() then
+              vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
@@ -964,3 +991,9 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- local integrations = require('nvconfig').base46.integrations
+--
+-- for _, name in ipairs(integrations) do
+--   dofile(vim.g.base46_cache .. name)
+-- end

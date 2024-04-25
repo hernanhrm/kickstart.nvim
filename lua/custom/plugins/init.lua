@@ -4,19 +4,6 @@
 -- See the kickstart.nvim README for more information
 return {
   {
-    'nvim-tree/nvim-tree.lua',
-    config = function()
-      require('nvim-tree').setup {
-        view = {
-          width = 40,
-        },
-        filters = {
-          dotfiles = false,
-        },
-      }
-    end,
-  },
-  {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = true,
@@ -34,30 +21,6 @@ return {
     lazy = false,
   },
   {
-    'folke/zen-mode.nvim',
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-      window = {
-        width = 0.65,
-        options = {
-          number = true,
-          relativenumber = true,
-        },
-      },
-      plugins = {
-        alacritty = {
-          enabled = true,
-          font = '12',
-        },
-      },
-    },
-    config = function()
-      vim.keymap.set('n', '<leader>zm', '<cmd> ZenMode <CR>', { desc = 'Toggle zen mode' })
-    end,
-  },
-  {
     'editorconfig/editorconfig-vim',
     lazy = false,
   },
@@ -72,16 +35,6 @@ return {
       vim.cmd [[silent! GoInstallDeps]]
     end,
   },
-  -- {
-  --   'Jezda1337/nvim-html-css',
-  --   dependencies = {
-  --     'hrsh7th/nvim-cmp',
-  --     'nvim-treesitter/nvim-treesitter',
-  --   },
-  --   config = function()
-  --     require('html-css'):setup()
-  --   end,
-  -- },
   {
     'NvChad/nvim-colorizer.lua',
     opts = {
@@ -116,4 +69,23 @@ return {
     lazy = true,
     event = 'VeryLazy',
   },
+  -- if u want nvchad's ui plugin :)
+  -- {
+  --   'NvChad/ui',
+  --   config = function()
+  --     require 'nvchad'
+  --   end,
+  -- },
+  -- -- dependency for ui
+  -- {
+  --   'nvim-tree/nvim-web-devicons',
+  --   lazy = true,
+  --   opts = function()
+  --     return { override = require 'nvchad.icons.devicons' }
+  --   end,
+  --   config = function(_, opts)
+  --     dofile(vim.g.base46_cache .. 'devicons')
+  --     require('nvim-web-devicons').setup(opts)
+  --   end,
+  -- },
 }
