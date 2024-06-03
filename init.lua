@@ -138,6 +138,8 @@ vim.keymap.set('n', '<leader>s', [[:%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left
 vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
 vim.keymap.set('n', '<leader>Y', [["+Y]])
 
+vim.keymap.set('x', 'p', '"_dP', { desc = 'Keep pasted text after pasted' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -359,7 +361,7 @@ require('lazy').setup({
         },
         pickers = {
           find_files = {
-            hidden = true,
+            hidden = false,
           },
           buffers = {
             show_all_buffers = true,
