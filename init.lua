@@ -561,6 +561,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        jdtls = {},
         -- clangd = {},
         gopls = {
           settings = {
@@ -644,10 +645,13 @@ require('lazy').setup({
         'emmet-language-server',
         'tailwindcss-language-server',
 
+        'jdtls',
+
         -- golang stuff
         'gopls',
         'goimports',
         'golines',
+        'golangci-lint',
 
         -- python
         'pyright',
