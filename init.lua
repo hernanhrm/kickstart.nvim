@@ -651,6 +651,7 @@ require('lazy').setup({
         'gopls',
         'goimports',
         'golines',
+        'gotests',
         'golangci-lint',
 
         -- python
@@ -658,6 +659,13 @@ require('lazy').setup({
         'ruff',
         'black',
         'isort',
+
+        'delve',
+        'emmet-ls',
+        'eslint_d',
+        'google-java-format',
+        'jdtls',
+        'js-debug-adapter',
 
         -- global
         -- 'refactoring',
