@@ -129,8 +129,11 @@ vim.keymap.set('v', 'J', ":m '>+1<cr>gv=gv", { desc = 'Move selected text up' })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selected text down' })
 
 -- Nvim tree
-vim.keymap.set('n', '<leader>pv', '<cmd> NvimTreeToggle <CR>', { desc = 'Toggle nvim tree' })
-vim.keymap.set('n', '<leader>e', '<cmd> NvimTreeFocus <CR>', { desc = 'Focus nvim tree' })
+vim.keymap.set('n', '<leader>fpv', '<cmd> NvimTreeToggle <CR>', { desc = 'Toggle nvim tree' })
+vim.keymap.set('n', '<leader>fpe', '<cmd> NvimTreeFocus <CR>', { desc = 'Focus nvim tree' })
+
+-- Oil
+vim.keymap.set('n', '<leader>pv', '<cmd> Oil <CR>', { desc = 'Toggle nvim tree' })
 
 -- ThePrimeagen's keybinds
 vim.keymap.set('n', '<leader>s', [[:%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Search and replace word in cursor' })
@@ -626,8 +629,7 @@ require('lazy').setup({
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
+      local ensure_installed = {
         -- lua stuff
         'lua-language-server',
         'stylua',
@@ -669,7 +671,8 @@ require('lazy').setup({
 
         -- global
         -- 'refactoring',
-      })
+      }
+
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
