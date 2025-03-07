@@ -18,6 +18,7 @@ return {
         end
 
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+        map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
         -- Document highlight support
         local client = vim.lsp.get_client_by_id(event.data.client_id)
